@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Garagem 67</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .carrossel-container {
+      position: relative;
+      max-width: 100%;
+      overflow: hidden;
+      height: 400px; /* Altura do carrossel */
+    }
+
+    .carrossel-slides {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+      width: 300%;
+      height: 100%;
+    }
+
+    .carrossel-slide {
+      min-width: 100%;
+      height: 100%;
+    }
+
+    .carrossel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .carrossel-botoes {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+      padding: 0 20px;
+    }
+
+    .carrossel-botoes button {
+      background: rgba(0,0,0,0.5);
+      color: white;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 10px;
+    }
+
+    .botao-servicos {
+      display: block;
+      margin: 30px auto;
+      background: #E10600;
+      color: white;
+      padding: 12px 30px;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 6px;
+      font-family: 'Montserrat', sans-serif;
+      transition: background 0.3s;
+      text-align: center;
+      width: fit-content;
+    }
+
+    .botao-servicos:hover {
+      background: #b30000;
+    }
+  </style>
+</head>
+<body>
+  <div class="menu-toggle" onclick="toggleMenu()">
+  <div></div>
+  <div></div>
+  <div></div>
+</div>
+
+  <header class="topo-site">
+    <a href="index.html">
+      <img src="imagens/logo.png" alt="Logo Garagem 67" class="logo">
+    </a>
+    <nav>
+      
+      <a href="index.html">Início</a>
+      <a href="servicos.html">Serviços</a>
+    </nav>
+  </header>
+
+  <main>
+  <!-- Carrossel de Imagens -->
+<div class="carrossel-container">
+  <!-- Slides -->
+  <div class="carrossel-slides" id="carrosselSlides">
+    <div class="slide">
+      <a href="servicos.html">
+        <img src="imagens/banner1.png" alt="Banner 1" />
+      </a>
+    </div>
+    <div class="slide">
+      <a href="servicos.html">
+        <img src="imagens/banner2.png" alt="Banner 2" />
+      </a>
+    </div>
+    <div class="slide">
+      <a href="servicos.html">
+        <img src="imagens/banner3.png" alt="Banner 3" />
+      </a>
+    </div>
+  </div>
+
+
+  <!-- Bolinhas de navegação -->
+  <div class="carrossel-dots" id="carrosselDots">
+    <button onclick="irParaSlide(0)" class="ativo"></button>
+    <button onclick="irParaSlide(1)"></button>
+    <button onclick="irParaSlide(2)"></button>
+  </div>
+</div>
+<!-- Seção de Destaque -->
+<section class="destaque">
+  <div class="conteudo-destaque">
+    <h2>POR QUE OFERECEMOS O MELHOR SERVIÇO PARA O SEU VEÍCULO ?</h2>
+    <p>
+      Estamos a mais de 8 anos cuidando dos veículos dos nossos clientes. Com profissionais qualificados no segmento, procuramos oferecer os melhores serviços, utilizando produtos de qualidade.
+    </p>
+    <p>
+      Somos apaixonados pelo que fazemos, e temos a experiência necessária para cuidar do seu veículo.
+    </p>
+    <a href="servicos.html" class="botao-destaque">Conheça os nossos serviços</a>
+  </div>
+</section>
+<section class="carrossel-imagens">
+  <h2>Avaliações de Clientes</h2>
+  <div class="imagens-container" id="galeriaAvaliacoes">
+    <img src="imagens/logo.jpeg" alt="Avaliação 1" onclick="ampliarImagem(this)">
+    <img src="imagens/logo.jpeg" alt="Avaliação 2" onclick="ampliarImagem(this)">
+    <img src="imagens/logo.jpeg" alt="Avaliação 3" onclick="ampliarImagem(this)">
+    <img src="imagens/logo.jpeg" alt="Avaliação 4" onclick="ampliarImagem(this)">
+    <!-- Adicione mais imagens conforme necessário -->
+  </div>
+
+  <div class="botoes-galeria">
+    <button onclick="moverGaleria(-1)">❮</button>
+    <button onclick="moverGaleria(1)">❯</button>
+  </div>
+
+  <!-- Modal para imagem ampliada -->
+  <div class="modal-imagem" id="modalImagem" onclick="fecharModal()">
+    <img id="imagemAmpliada" src="">
+  </div>
+</section>
+    <section class="estrutura">
+  <div class="estrutura-conteudo">
+    <div class="estrutura-texto">
+      <h2><strong>CONHEÇA A<br>NOSSA ESTRUTURA</strong></h2>
+      <div class="barra-vermelha"></div>
+      <p>
+        A Garagem 67 é a maior estética automotiva da região. Com ótima localização, é um lugar completo para seu veículo ficar novo e lindo novamente!
+      </p>
+      <p>
+        Sempre buscando conforto e qualidade para nossos clientes. Somos a estética automotiva que você procura! Venha nos conhecer!
+      </p>
+      <a class="botao-mapa" href="https://www.google.com/maps?q=Garagem+67" target="_blank">📍 Saiba como chegar</a>
+    </div>
+    <div class="estrutura-imagens">
+      <img src="imagens/logo.jpeg" alt="Foto 1 da estrutura" />
+      <img src="imagens/logo.jpeg" alt="Foto 2 da estrutura" />
+      <img src="imagens/logo.jpeg" alt="Foto 3 da estrutura" />
+      <img src="imagens/logo.jpeg" alt="Foto 4 da estrutura" />
+    </div>
+  </div>
+</section>
+
+<!-- Botão para Serviços -->
+    <a class="botao-servicos" href="servicos.html">Ver Serviços</a>
+
+
+  </main>
+
+  <!-- <footer>
+    <p>&copy; 2025 Garagem67. Todos os direitos reservados.</p>
+  </footer> -->
+  <script>
+  let slideIndex = 0;
+
+  function mostrarSlide(index) {
+    const slides = document.getElementById('carrosselSlides');
+    const dots = document.querySelectorAll('.carrossel-dots button');
+    const totalSlides = slides.children.length;
+
+    slideIndex = (index + totalSlides) % totalSlides;
+    slides.style.transform = `translateX(-${slideIndex * 100}%)`;
+
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('ativo', i === slideIndex);
+    });
+  }
+
+  function irParaSlide(n) {
+    mostrarSlide(n);
+  }
+
+  setInterval(() => {
+    mostrarSlide(slideIndex + 1);
+  }, 5000);
+</script>
+
+<!-- rodapé -->
+<footer class="rodape">
+  <div class="rodape-container">
+    <div class="rodape-coluna">
+      <h3>VOLTE SEMPRE !</h3>
+      <p>Agradecemos a sua visita em nosso site.<br>
+        Em caso de dúvidas, entre em contato conosco. Teremos prazer em atendê-los.
+      </p>
+      <p>esteticaautomotivarbs@gmail.com<br>
+        (11) 98931-0990
+      </p>
+    </div>
+
+    <div class="servicos-bloco">
+  <h3>NOSSOS SERVIÇOS</h3>
+  <div class="servico-item">- Lavagem Simples e Detalhada</div>
+  <div class="servico-item">- Higienização Interna</div>
+  <div class="servico-item">- Polimento Técnico</div>
+  <div class="servico-item">- Polimento de Faróis</div>
+  <div class="servico-item">- Hidratação de Bancos</div>
+  <div class="servico-item">- Cristalização</div>
+  <div class="servico-item">- Vitrificação</div>
+  <div class="servico-item">- Lavagem de Motor</div>
+  <div class="servico-item">- Martelinho de Ouro</div>
+  <div class="servico-item">- Instalação de Insulfilm</div>
+  <div class="servico-item">- Funilaria e Pintura</div>
+</div>
+
+
+    <div class="rodape-coluna">
+      <h3>ENCONTRE-NOS</h3>
+      <p><strong>Garagem67:</strong><br>
+      Em Breve!<br>
+       <p><strong> Redes Sociais</strong><br>
+  
+      
+      <div class="redes-sociais">
+
+        <a href="#"><img src="imagens/instagram.png" alt="Instagram"></a>
+        <a href="#"><img src="imagens/localizacao.png" alt="Localização"></a>
+        <a href="#"><img src="imagens/email.png" alt="E-mail"></a>
+      </div>
+      <div class="rodape-bottom">
+    <p>© 2025 Garagem67<br>
+      CNPJ -000.000.000.000</p>
+    <a href="politica.html" class="botao-politica">Política de Privacidade</a>
+  </div>
+    </div>
+  </div>
+
+  
+
+  <a href="https://wa.me/5511989310990" class="whatsapp-fixo" target="_blank">
+    <img src="imagens/whatsapp.png" alt="WhatsApp">
+  </a>
+</footer>
+
+<script>
+  function toggleMenu() {
+    const nav = document.querySelector("nav");
+    nav.classList.toggle("active");
+  }
+</script>
+
+</body>
+</html>

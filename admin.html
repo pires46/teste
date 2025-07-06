@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Painel Admin - Garagem 67</title>
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #000;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      color: #E10600;
+    }
+
+    .reserva {
+      border: 1px solid #ccc;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .reserva button {
+      margin-top: 10px;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: #E10600;
+      color: #fff;
+    }
+
+    .reserva button:last-child {
+      background-color: green;
+    }
+
+    #novaReservaBtn {
+      background-color: #E10600;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      margin-bottom: 20px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .modal-content input, .modal-content select, .modal-content button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 0.5rem;
+    }
+
+    .botao-horario {
+      padding: 8px;
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .botao-horario.selecionado {
+      background-color: #E10600;
+      color: white;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Admin - Garagem 67</h1>
+  <a href="index.html">Início</a>
+      <a href="servicos.html">Serviços</a>
+</header>
+
+<div class="container">
+  <button id="novaReservaBtn" onclick="abrirModal()">+ Nova Reserva</button>
+
+  <h2>Reservas Agendadas</h2>
+  <div id="listaReservas"></div>
+</div>
+
+<!-- Modal -->
+<div class="modal" id="modalReserva">
+  <div class="modal-content">
+    <h3>Nova Reserva</h3>
+    <label for="servico">Tipo de Lavagem:</label>
+    <select id="servico">
+      <option value="Lavagem Simples">Lavagem Simples</option>
+      <option value="Lavagem Completa">Lavagem Completa</option>
+      <option value="Lavagem Premium">Lavagem Premium</option>
+    </select>
+
+    <div id="calendario" style="margin: 10px 0;"></div>
+    <div id="horarios" style="display:none; margin-top:10px; display:grid; grid-template-columns: repeat(3, 1fr); gap: 10px;"></div>
+
+    <input type="text" id="nomeCliente" placeholder="Nome do Cliente" style="display:none" />
+    <input type="text" id="telefoneCliente" placeholder="Telefone com DDD (ex: 11999998888)" style="display:none" />
+    <button id="btnSalvar" onclick="salvarReserva()" style="display:none">Salvar Reserva</button>
+  </div>
+</div>
+
+<script>
+  let dataSelecionada = "";
+  let horaSelecionada = "";
+
+  function abrirModal() {
+    document.getElementById("modalReserva").style.display = "flex";
+    dataSelecionada = "";
+    horaSelecionada = "";
+
+    document.getElementById("calendario").style.display = "block";
+    document.getElementById("horarios").style.display = "none";
+    document.getElementById("nomeCliente").style.display = "none";
+    document.getElementById("telefoneCliente").style.display = "none";
+    document.getElementById("btnSalvar").style.display = "none";
+
+    renderizarCalendario();
+  }
+
+  function fecharModal() {
+    document.getElementById("modalReserva").style.display = "none";
+  }
+
+  function renderizarCalendario() {
+    const calendario = document.getElementById("calendario");
+    calendario.innerHTML = "";
+
+    const hoje = new Date();
+    const ano = hoje.getFullYear();
+    const mes = hoje.getMonth();
+    const diasNoMes = new Date(ano, mes + 1, 0).getDate();
+
+    const titulo = document.createElement("h4");
+    titulo.innerText = hoje.toLocaleString("pt-BR", { month: "long" }).toUpperCase() + " " + ano;
+    calendario.appendChild(titulo);
+
+    const grid = document.createElement("div");
+    grid.style.display = "grid";
+    grid.style.gridTemplateColumns = "repeat(7, 1fr)";
+    grid.style.gap = "5px";
+
+    const nomesDias = ["D", "S", "T", "Q", "Q", "S", "S"];
+    nomesDias.forEach(d => {
+      const el = document.createElement("div");
+      el.innerText = d;
+      el.style.fontWeight = "bold";
+      el.style.textAlign = "center";
+      grid.appendChild(el);
+    });
+
+    const primeiroDiaSemana = new Date(ano, mes, 1).getDay();
+    for (let i = 0; i < primeiroDiaSemana; i++) {
+      const vazio = document.createElement("div");
+      grid.appendChild(vazio);
+    }
+
+    for (let dia = 1; dia <= diasNoMes; dia++) {
+      const cell = document.createElement("button");
+      cell.innerText = dia;
+      cell.style.padding = "10px";
+      cell.style.borderRadius = "6px";
+      cell.style.border = "1px solid #ccc";
+      cell.style.cursor = "pointer";
+      const dataStr = `${ano}-${(mes + 1).toString().padStart(2, "0")}-${dia.toString().padStart(2, "0")}`;
+      cell.onclick = () => selecionarData(dataStr);
+      grid.appendChild(cell);
+    }
+
+    calendario.appendChild(grid);
+  }
+
+  function selecionarData(data) {
+    dataSelecionada = data;
+
+    const horarios = ["08:00","09:00","10:00","11:00","13:00","14:00","15:00","16:00","17:00"];
+    const reservas = JSON.parse(localStorage.getItem("reservas")) || [];
+
+    const ocupados = reservas.filter(r => r.data === data).map(r => r.hora);
+
+    const container = document.getElementById("horarios");
+    container.innerHTML = "";
+    horarios.forEach(h => {
+      const btn = document.createElement("button");
+      btn.innerText = h;
+      btn.className = "botao-horario";
+
+      if (ocupados.includes(h)) {
+        btn.disabled = true;
+        btn.style.backgroundColor = "#ccc";
+        btn.style.cursor = "not-allowed";
+      } else {
+        btn.onclick = () => selecionarHora(h);
+      }
+
+      container.appendChild(btn);
+    });
+
+    // Mostrar horários, esconder calendário e outros
+    document.getElementById("calendario").style.display = "none";
+    document.getElementById("horarios").style.display = "grid";
+    document.getElementById("nomeCliente").style.display = "none";
+    document.getElementById("telefoneCliente").style.display = "none";
+    document.getElementById("btnSalvar").style.display = "none";
+  }
+
+  function selecionarHora(hora) {
+    horaSelecionada = hora;
+
+    const botoes = document.querySelectorAll(".botao-horario");
+    botoes.forEach(b => b.classList.remove("selecionado"));
+    const selecionado = Array.from(botoes).find(b => b.innerText === hora);
+    if (selecionado) selecionado.classList.add("selecionado");
+
+    document.getElementById("horarios").style.display = "none";
+    document.getElementById("nomeCliente").style.display = "block";
+    document.getElementById("telefoneCliente").style.display = "block";
+    document.getElementById("btnSalvar").style.display = "block";
+    document.getElementById("nomeCliente").focus();
+  }
+
+  function salvarReserva() {
+    const nome = document.getElementById("nomeCliente").value;
+    const telefone = document.getElementById("telefoneCliente").value;
+    const servico = document.getElementById("servico").value;
+
+    if (!nome || !telefone || !dataSelecionada || !horaSelecionada) {
+      alert("Preencha todos os campos.");
+      return;
+    }
+
+    const nova = { nome, telefone, servico, data: dataSelecionada, hora: horaSelecionada };
+    const reservas = JSON.parse(localStorage.getItem("reservas")) || [];
+    reservas.push(nova);
+    localStorage.setItem("reservas", JSON.stringify(reservas));
+    fecharModal();
+    carregarReservas();
+  }
+
+  function carregarReservas() {
+    const reservas = JSON.parse(localStorage.getItem("reservas")) || [];
+    const lista = document.getElementById("listaReservas");
+    lista.innerHTML = "";
+
+    reservas.forEach((r, index) => {
+      const div = document.createElement("div");
+      div.className = "reserva";
+      div.innerHTML = `
+        <strong>${r.servico}</strong><br>
+        Cliente: ${r.nome}<br>
+        Telefone: ${r.telefone}<br>
+        Data: ${formatarDataBrasileira(r.data)} - Hora: ${r.hora}<br>
+
+        <button onclick="excluirReserva(${index})">Excluir</button>
+        <button onclick="enviarMensagem(${index})">Enviar Mensagem</button>
+      `;
+      lista.appendChild(div);
+    });
+  }
+
+  function formatarDataBrasileira(dataISO) {
+  const partes = dataISO.split("-");
+  return `${partes[2]}/${partes[1]}/${partes[0]}`;
+}
+
+
+  function excluirReserva(index) {
+    const reservas = JSON.parse(localStorage.getItem("reservas")) || [];
+    reservas.splice(index, 1);
+    localStorage.setItem("reservas", JSON.stringify(reservas));
+    carregarReservas();
+  }
+
+  function enviarMensagem(index) {
+    const reservas = JSON.parse(localStorage.getItem("reservas")) || [];
+    const r = reservas[index];
+
+    const numero = r.telefone.replace(/\D/g, '');
+    if (!numero) {
+      alert("Telefone inválido.");
+      return;
+    }
+
+    const msg = `Olá ${r.nome}, sua lavagem do tipo *${r.servico}* está agendada para *${r.data}* às *${r.hora}*. Obrigado por escolher a Garagem 67! 🚗✨`;
+    const url = `https://wa.me/55${numero}?text=${encodeURIComponent(msg)}`;
+    window.open(url, "_blank");
+  }
+
+  // Inicializar
+  carregarReservas();
+</script>
+
+</body>
+</html>

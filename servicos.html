@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Garagem 67 - Serviços</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background-color: #000000;
+      margin: 0;
+    }
+
+    .topo-site {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #000;
+      padding: 1rem;
+    }
+
+    .topo-site .logo {
+      height: 60px;
+    }
+
+    .topo-site nav a {
+      color: #fff;
+      text-decoration: none;
+      margin-left: 80px;
+      font-weight: bold;
+    }
+
+    .servicos-container {
+      padding: 2rem;
+      text-align: center;
+    }
+
+    .servicos-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .card-servico {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      width: 300px;
+      padding: 1rem;
+    }
+
+    .card-servico img {
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    .card-servico h3 {
+      margin: 1rem 0 0.5rem;
+      color: #E10600;
+    }
+
+    .card-servico .preco {
+      font-weight: bold;
+      color: #000;
+    }
+
+    .card-servico button {
+      background-color: #E10600;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    footer {
+      background: #000;
+      color: #fff;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      text-align: left;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .modal-content input, .modal-content button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 0.5rem;
+    }
+
+    .fechar-modal {
+      background: transparent;
+      border: none;
+      float: right;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .botao-horario {
+      padding: 8px;
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .botao-horario.selecionado {
+      background-color: #E10600;
+      color: white;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  
+ <!-- TOPO - GARAGEM 67 -->
+<div class="topo-site">
+  <div class="logo-bloco">
+    <img src="imagens/logo.png" alt="Garagem 67" class="logo-nova">
+
+  </div>
+  <nav class="menu-topo">
+    <a href="index.html">Início</a>
+    <a href="servicos.html">Serviços</a>
+  </nav>
+</div>
+
+
+
+
+  <main class="servicos-container">
+    <h2 class="titulo-servicos">Nossos Serviços</h2>
+    <div class="servicos-grid">
+      <div class="card-servico">
+        <img src="imagens/logo.jpeg" alt="Lavagem Simples" />
+        <h3>Lavagem Simples</h3>
+        <p>Lavagem externa rápida com produtos de qualidade.</p>
+        <span class="preco">R$ 30,00</span>
+        <button onclick="abrirReserva('Lavagem Simples')">Reservar</button>
+      </div>
+
+      <div class="card-servico">
+        <img src="imagens/logo.jpeg" alt="Lavagem Completa" />
+        <h3>Lavagem Completa</h3>
+        <p>Lavagem externa e interna com higienização completa.</p>
+        <span class="preco">R$ 60,00</span>
+        <button onclick="abrirReserva('Lavagem Completa')">Reservar</button>
+      </div>
+
+      <div class="card-servico">
+        <img src="imagens/logo.jpeg" alt="Lavagem Premium" />
+        <h3>Lavagem Premium</h3>
+        <p>Serviço premium com cera, motor e detalhamento.</p>
+        <span class="preco">R$ 100,00</span>
+        <button onclick="abrirReserva('Lavagem Premium')">Reservar</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal -->
+  <div class="modal" id="modalReserva">
+    <div class="modal-content">
+      <button class="fechar-modal" onclick="fecharReserva()">×</button>
+      <h3>Reservar <span id="servicoSelecionado"></span></h3>
+      <div id="calendario" style="margin-bottom: 10px;"></div>
+      <div id="horarios" style="display:none; margin-top:10px; display:grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+        <button class="botao-horario" onclick="selecionarHora('08:00')">08:00</button>
+        <button class="botao-horario" onclick="selecionarHora('09:00')">09:00</button>
+        <button class="botao-horario" onclick="selecionarHora('10:00')">10:00</button>
+        <button class="botao-horario" onclick="selecionarHora('11:00')">11:00</button>
+        <button class="botao-horario" onclick="selecionarHora('13:00')">13:00</button>
+        <button class="botao-horario" onclick="selecionarHora('14:00')">14:00</button>
+        <button class="botao-horario" onclick="selecionarHora('15:00')">15:00</button>
+        <button class="botao-horario" onclick="selecionarHora('16:00')">16:00</button>
+        <button class="botao-horario" onclick="selecionarHora('17:00')">17:00</button>
+      </div>
+      <input type="text" id="nomeCliente" placeholder="Seu nome" required style="display:none" />
+      <button id="btnEnviar" onclick="enviarWhatsApp()" style="display:none">Enviar Reserva</button>
+    </div>
+  </div>
+
+  <!-- <footer>
+    <p>&copy; 2025 Garagem 67. Todos os direitos reservados.</p>
+  </footer> -->
+
+  <script>
+  let servico = "";
+  let dataSelecionada = "";
+  let horaSelecionada = "";
+
+  function abrirReserva(nomeServico) {
+    servico = nomeServico;
+    document.getElementById("servicoSelecionado").innerText = servico;
+    document.getElementById("modalReserva").style.display = "flex";
+
+    dataSelecionada = "";
+    horaSelecionada = "";
+    document.getElementById("nomeCliente").value = "";
+
+    document.getElementById("calendario").style.display = "block";
+    document.getElementById("horarios").style.display = "none";
+    document.getElementById("nomeCliente").style.display = "none";
+    document.getElementById("btnEnviar").style.display = "none";
+
+    renderizarCalendario();
+  }
+
+  function fecharReserva() {
+    document.getElementById("modalReserva").style.display = "none";
+  }
+
+  function renderizarCalendario() {
+    const calendario = document.getElementById("calendario");
+    calendario.innerHTML = "";
+
+    const hoje = new Date();
+    const ano = hoje.getFullYear();
+    const mes = hoje.getMonth();
+    const diasNoMes = new Date(ano, mes + 1, 0).getDate();
+
+    const nomesDias = ["D", "S", "T", "Q", "Q", "S", "S"];
+    const titulo = document.createElement("h4");
+    titulo.innerText = `${hoje.toLocaleString("pt-BR", {
+      month: "long",
+    })} ${ano}`.toUpperCase();
+    titulo.style.textAlign = "center";
+    calendario.appendChild(titulo);
+
+    const grid = document.createElement("div");
+    grid.style.display = "grid";
+    grid.style.gridTemplateColumns = "repeat(7, 1fr)";
+    grid.style.gap = "5px";
+
+    for (let d = 0; d < 7; d++) {
+      const cell = document.createElement("div");
+      cell.innerText = nomesDias[d];
+      cell.style.fontWeight = "bold";
+      cell.style.textAlign = "center";
+      grid.appendChild(cell);
+    }
+
+    const primeiroDiaSemana = new Date(ano, mes, 1).getDay();
+    for (let i = 0; i < primeiroDiaSemana; i++) {
+      const vazio = document.createElement("div");
+      grid.appendChild(vazio);
+    }
+
+    for (let dia = 1; dia <= diasNoMes; dia++) {
+      const cell = document.createElement("button");
+      cell.innerText = dia;
+      cell.style.padding = "10px";
+      cell.style.borderRadius = "6px";
+      cell.style.border = "1px solid #ccc";
+      cell.style.cursor = "pointer";
+      const dataStr = `${ano}-${(mes + 1).toString().padStart(2, "0")}-${dia.toString().padStart(2, "0")}`;
+      cell.onclick = () => selecionarData(dataStr);
+      grid.appendChild(cell);
+    }
+
+    calendario.appendChild(grid);
+  }
+
+  function selecionarData(data) {
+    dataSelecionada = data;
+    document.getElementById("calendario").style.display = "none";
+
+    const horariosContainer = document.getElementById("horarios");
+    horariosContainer.innerHTML = "";
+
+    const todosHorarios = ["08:00", "09:00", "10:00", "11:00", "13:00", "14:00", "15:00", "16:00", "17:00"];
+    const reservas = JSON.parse(localStorage.getItem("reservas")) || [];
+
+    const horariosOcupados = reservas
+      .filter(r => r.data === dataSelecionada)
+      .map(r => r.hora);
+
+    todosHorarios.forEach(horario => {
+      const btn = document.createElement("button");
+      btn.innerText = horario;
+      btn.className = "botao-horario";
+
+      if (horariosOcupados.includes(horario)) {
+        btn.disabled = true;
+        btn.style.backgroundColor = "#ccc";
+        btn.style.cursor = "not-allowed";
+      } else {
+        btn.onclick = () => selecionarHora(horario);
+      }
+
+      horariosContainer.appendChild(btn);
+    });
+
+    horariosContainer.style.display = "grid";
+    document.getElementById("nomeCliente").style.display = "none";
+    document.getElementById("btnEnviar").style.display = "none";
+  }
+
+  function selecionarHora(hora) {
+    horaSelecionada = hora;
+
+    const botoes = document.querySelectorAll(".botao-horario");
+    botoes.forEach(btn => btn.classList.remove("selecionado"));
+    const botao = Array.from(botoes).find(b => b.innerText === hora);
+    if (botao) botao.classList.add("selecionado");
+
+    document.getElementById("horarios").style.display = "none";
+    document.getElementById("nomeCliente").style.display = "block";
+    document.getElementById("btnEnviar").style.display = "block";
+    document.getElementById("nomeCliente").focus();
+  }
+
+  function enviarWhatsApp() {
+  const nome = document.getElementById("nomeCliente").value;
+  if (!nome || !dataSelecionada || !horaSelecionada) {
+    alert("Preencha todos os campos.");
+    return;
+  }
+
+  const telefone = "5511978370838"; // Substitua por seu número real
+  const mensagem = `Olá! Gostaria de reservar o serviço: ${servico}\n🧍 Nome: ${nome}\n📅 Data: ${dataSelecionada}\n🕐 Hora: ${horaSelecionada}`;
+  const url = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`;
+
+    // Após enviar, gravar a reserva no localStorage
+    const reservas = JSON.parse(localStorage.getItem("reservas")) || [];
+    reservas.push({
+      nome,
+      servico,
+      data: dataSelecionada,
+      hora: horaSelecionada
+    });
+    localStorage.setItem("reservas", JSON.stringify(reservas));
+
+    window.open(url, "_blank");
+    fecharReserva();
+  }
+
+  
+</script>
+
+<section class="condicoes-especiais">
+  <div class="container-condicoes">
+    <h2><strong>CONFIRA NOSSAS CONDIÇÕES ESPECIAIS</strong></h2>
+
+    <ul class="beneficios">
+      <li><strong>7% DE DESCONTO NO PIX</strong></li>
+      <li><strong>PARCELAMENTO EM ATÉ 10X SEM JUROS NO CARTÃO</strong></li>
+    </ul>
+
+    <p class="condicao-minima">CONDIÇÃO VÁLIDA EM SERVIÇOS ACIMA DE R$249,49</p>
+  </div>
+</section>
+
+<!-- rodapé -->
+<footer class="rodape">
+  <div class="rodape-container">
+    <div class="rodape-coluna">
+      <h3>VOLTE SEMPRE !</h3>
+      <p>Agradecemos a sua visita em nosso site.<br>
+        Em caso de dúvidas, entre em contato conosco. Teremos prazer em atendê-los.
+      </p>
+      <p>esteticaautomotivarbs@gmail.com<br>
+        (11) 98931-0990
+      </p>
+    </div>
+
+    <div class="servicos-bloco">
+  <h3>NOSSOS SERVIÇOS</h3>
+  <div class="servico-item">- Lavagem Simples e Detalhada</div>
+  <div class="servico-item">- Higienização Interna</div>
+  <div class="servico-item">- Polimento Técnico</div>
+  <div class="servico-item">- Polimento de Faróis</div>
+  <div class="servico-item">- Hidratação de Bancos</div>
+  <div class="servico-item">- Cristalização</div>
+  <div class="servico-item">- Vitrificação</div>
+  <div class="servico-item">- Lavagem de Motor</div>
+  <div class="servico-item">- Martelinho de Ouro</div>
+  <div class="servico-item">- Instalação de Insulfilm</div>
+  <div class="servico-item">- Funilaria e Pintura</div>
+</div>
+
+
+    <div class="rodape-coluna">
+      <h3>ENCONTRE-NOS</h3>
+      <p><strong>Garagem67:</strong><br>
+      Em Breve!<br>
+       <p><strong> Redes Sociais</strong><br>
+  
+      
+      <div class="redes-sociais">
+
+        <a href="#"><img src="imagens/instagram.png" alt="Instagram"></a>
+        <a href="#"><img src="imagens/localizacao.png" alt="Localização"></a>
+        <a href="#"><img src="imagens/email.png" alt="E-mail"></a>
+      </div>
+      <div class="rodape-bottom">
+    <p>© 2025 Garagem67<br>
+      CNPJ -000.000.000.000</p>
+    <a href="politica.html" class="botao-politica">Política de Privacidade</a>
+  </div>
+
+  <a href="https://wa.me/5511989310990" class="whatsapp-fixo" target="_blank">
+    <img src="imagens/whatsapp.png" alt="WhatsApp">
+  </a>
+    </div>
+  </div>
+
+  
+  
+</body>
+</html>
